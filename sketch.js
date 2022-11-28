@@ -112,6 +112,7 @@ const sketch = ({ width, height }) => {
   ]
 
   const bgColor = randomUtils.pick(risoColors).hex;
+  const outerPolyStrokeColor = randomUtils.pick(rectColors);
 
   const mask = {
     radius: width * 0.3,
@@ -200,8 +201,6 @@ const sketch = ({ width, height }) => {
       drawPolygon({ context, ...mask });
 
       subContext(context, () => {
-        const outerPolyStrokeColor = randomUtils.pick(rectColors);
-
         configureShadow({
           context,
           color: colorUtils.style(deriveLesserColor('black', -10, 0.5)),
