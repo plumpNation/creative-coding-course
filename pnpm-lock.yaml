@@ -4,10 +4,12 @@ specifiers:
   canvas-sketch: 0.7.6
   canvas-sketch-cli: 1.11.20
   canvas-sketch-util: 1.10.0
+  riso-colors: 1.0.1
 
 dependencies:
   canvas-sketch: 0.7.6
   canvas-sketch-util: 1.10.0
+  riso-colors: 1.0.1
 
 devDependencies:
   canvas-sketch-cli: 1.11.20
@@ -3041,6 +3043,10 @@ packages:
       hash-base: 3.1.0
       inherits: 2.0.4
     dev: true
+
+  /riso-colors/1.0.1:
+    resolution: {integrity: sha512-foLj2eUiyft2hOe7PzsT9qcT+zLnkw3pGesPQv6JG93OJ0+1J0fdCwdtwxDDCqnYDdgRatKbrb0qhB95vhZ2wQ==}
+    dev: false
 
   /run-series/1.1.9:
     resolution: {integrity: sha512-Arc4hUN896vjkqCYrUXquBFtRZdv1PfLbTYP71efP6butxyQ0kWpiNJyAgsxscmQg1cqvHY32/UCBzXedTpU2g==}
