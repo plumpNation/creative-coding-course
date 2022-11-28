@@ -78,7 +78,8 @@ const deriveLesserColor = (color, luminance, opacity) => {
 }
 
 const centerTranslation = (context, width, height) => {
-  context.translate(width * 0.5, height * 0.5);
+  // 0.58 is a hack to centre the triangle in the easiest way
+  context.translate(width * 0.5, height * 0.58);
 }
 
 const subContext = (context, cb) => {
@@ -151,10 +152,6 @@ const sketch = ({ width, height }) => {
       centerTranslation(context, width, height);
 
       drawPolygon({ context, ...mask });
-
-      context.lineWidth = 10;
-      context.strokeStyle = 'black';
-      context.stroke();
     });
 
     context.clip();
