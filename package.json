@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "canvas-sketch-cli sketch.js"
+    "triangle": "canvas-sketch sketches/triangle.js"
   },
   "keywords": [],
   "author": "Gavin King <plumpnation@gmail.com>",

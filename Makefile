@@ -1,5 +1,5 @@
-dev:
-	pnpm run dev
+triangle:
+	pnpm run triangle
 
 install:
 	pnpm install
