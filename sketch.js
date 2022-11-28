@@ -48,12 +48,26 @@ const drawSkewedRectangle = ({
   context.restore();
 }
 
+const drawEquilateralTriangle = (context, size = 300) => {
+  const twoThirds = (size / 3) * 2;
+
+  context.beginPath();
+  context.moveTo(0, -size);
+  context.lineTo(size, twoThirds);
+  context.lineTo(-size, twoThirds);
+  context.closePath();
+}
+
 const deriveLesserColor = (color, luminance, opacity) => {
   const result = colorUtils.offsetHSL(color, 0, 0, luminance);
 
   result.rgba[3] = opacity;
 
   return result.rgba
+}
+
+const centerTranslation = (context, width, height) => {
+  context.translate(width * 0.5, height * 0.5);
 }
 
 const configureShadow = ({
@@ -110,6 +124,19 @@ const sketch = ({ width, height }) => {
     context.fillStyle = bgColor;
     context.fillRect(0, 0, width, height);
 
+    context.save();
+
+    centerTranslation(context, width, height);
+
+    drawEquilateralTriangle(context, 300);
+
+    context.lineWidth = 10;
+    context.strokeStyle = 'black';
+    context.stroke();
+
+    context.restore();
+    context.clip();
+
     rects.forEach(({ x, y, w, h, fill, stroke }) => {
       context.save()
       context.translate(x, y); // center
@@ -146,7 +173,7 @@ const sketch = ({ width, height }) => {
       context.stroke();
 
       context.restore();
-    })
+    });
   };
 };
 
