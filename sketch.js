@@ -5,7 +5,7 @@ const colorUtils = require('canvas-sketch-util/color');
 const risoColors = require('riso-colors');
 
 const settings = {
-  dimensions: [ 800, 800 ],
+  dimensions: [ 1080, 1080 ],
   // animate: true,
   fps: 60,
 };
@@ -36,28 +36,39 @@ const drawSkewedRectangle = ({
 
   context.translate(x * -0.5, (y + h) * -0.5); // move draw origin
 
-  context.save();
-
   context.beginPath();
   context.moveTo(0, 0);
   context.lineTo(x, y);
   context.lineTo(x, y + h);
   context.lineTo(0, h);
-  context.lineTo(0, 0);
-
-  context.restore();
-}
-
-const drawEquilateralTriangle = (context, size = 300) => {
-  const twoThirds = (size / 3) * 2;
-
-  context.beginPath();
-  context.moveTo(0, -size);
-  context.lineTo(size, twoThirds);
-  context.lineTo(-size, twoThirds);
   context.closePath();
 }
 
+const drawPolygon = ({ context, radius = 300, sides = 6 }) => {
+  const slice = Math.PI * 2 / sides;
+
+  context.beginPath();
+  context.moveTo(0, -radius);
+
+  for (let i = 0; i < sides; i++) {
+    const theta = i * slice - Math.PI * 0.5;
+
+    context.lineTo(
+      Math.cos(theta) * radius,
+      Math.sin(theta) * radius,
+    );
+  }
+
+  context.closePath();
+}
+
+/**
+ *
+ * @param {string} color
+ * @param {number} luminance HSL Luminance
+ * @param {number} opacity Alpha channel decimal
+ * @returns {string} rgba style value
+ */
 const deriveLesserColor = (color, luminance, opacity) => {
   const result = colorUtils.offsetHSL(color, 0, 0, luminance);
 
@@ -68,6 +79,12 @@ const deriveLesserColor = (color, luminance, opacity) => {
 
 const centerTranslation = (context, width, height) => {
   context.translate(width * 0.5, height * 0.5);
+}
+
+const subContext = (context, cb) => {
+  context.save();
+  cb();
+  context.restore();
 }
 
 const configureShadow = ({
@@ -95,6 +112,11 @@ const sketch = ({ width, height }) => {
   ]
 
   const bgColor = randomUtils.pick(risoColors).hex;
+
+  const mask = {
+    radius: width * 0.3,
+    sides: 3,
+  };
 
   // Since the render function is called when
   // saving an image from the browser, we need
@@ -124,55 +146,75 @@ const sketch = ({ width, height }) => {
     context.fillStyle = bgColor;
     context.fillRect(0, 0, width, height);
 
-    context.save();
+    subContext(context, () => {
+      centerTranslation(context, width, height);
 
-    centerTranslation(context, width, height);
+      drawPolygon({ context, ...mask });
 
-    drawEquilateralTriangle(context, 300);
+      context.lineWidth = 10;
+      context.strokeStyle = 'black';
+      context.stroke();
+    });
 
-    context.lineWidth = 10;
-    context.strokeStyle = 'black';
-    context.stroke();
-
-    context.restore();
     context.clip();
 
     rects.forEach(({ x, y, w, h, fill, stroke }) => {
-      context.save()
-      context.translate(x, y); // center
-      context.strokeStyle = stroke;
-      context.fillStyle = fill;
-      context.lineWidth = 10;
+      subContext(context, () => {
+        context.translate(x, y); // center
+        context.strokeStyle = stroke;
+        context.fillStyle = fill;
+        context.lineWidth = 10;
 
-      context.globalCompositeOperation = randomUtils.value() > 0.5 ? 'overlay' : 'source-over';
+        context.globalCompositeOperation = randomUtils.value() > 0.5 ? 'overlay' : 'source-over';
 
-      drawSkewedRectangle({ context, w, h, degrees })
+        drawSkewedRectangle({ context, w, h, degrees })
 
-      // We don't want shadow on the stroke, only the fill
-      // so we want to save a snapshot of the context to restore.
-      context.save();
+        subContext(context, () => {
+          // We don't want shadow on the stroke, only the fill
+          configureShadow({
+            context,
+            color: colorUtils.style(deriveLesserColor(fill, -20, 0.8)),
+            offsetX: -10,
+            offsetY: 20,
+            blur: 8,
+          });
 
-      configureShadow({
-        context,
-        color: colorUtils.style(deriveLesserColor(fill, -20, 0.8)),
-        offsetX: -10,
-        offsetY: 20,
-        blur: 8,
-      })
+          context.fill();
+        });
 
-      context.fill();
-      // restore to reset the shadowColor
-      context.restore();
+        context.stroke();
 
-      context.stroke();
+        context.globalCompositeOperation = 'source-over';
 
-      context.globalCompositeOperation = 'source-over';
+        context.lineWidth = 1;
+        context.strokeStyle = 'black';
+        context.stroke();
+      });
+    });
 
-      context.lineWidth = 1;
-      context.strokeStyle = 'black';
-      context.stroke();
+    context.restore(); // need one to stop clipping
 
-      context.restore();
+    subContext(context, () => {
+      centerTranslation(context, width, height);
+
+      drawPolygon({ context, ...mask });
+
+      subContext(context, () => {
+        const outerPolyStrokeColor = randomUtils.pick(rectColors);
+
+        configureShadow({
+          context,
+          color: colorUtils.style(deriveLesserColor('black', -10, 0.5)),
+          offsetX: 0,
+          offsetY: 10,
+          blur: 10,
+        })
+
+        context.strokeStyle = outerPolyStrokeColor;
+        context.lineWidth = 30;
+
+        context.stroke();
+      });
     });
   };
 };
