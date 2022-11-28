@@ -5,16 +5,17 @@ const colorUtils = require('canvas-sketch-util/color');
 const risoColors = require('riso-colors');
 const random = require('canvas-sketch-util/random');
 
+// Change for new artwork
+const seed = 1; // random.getRandomSeed();
+
 const artboard = 1000
 
 const settings = {
   dimensions: [ artboard, artboard ],
   // animate: true,
   fps: 60,
+  name: 'triangle-' + seed, // use the seed as the name
 };
-
-// Change for new artwork
-const seed = 1;
 
 /**
  * Calculate the coordinates for a specific angle
