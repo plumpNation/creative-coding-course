@@ -3,6 +3,7 @@ const mathUtils = require('canvas-sketch-util/math');
 const randomUtils = require('canvas-sketch-util/random');
 const colorUtils = require('canvas-sketch-util/color');
 const risoColors = require('riso-colors');
+const random = require('canvas-sketch-util/random');
 
 const artboard = 1000
 
@@ -11,6 +12,9 @@ const settings = {
   // animate: true,
   fps: 60,
 };
+
+// Change for new artwork
+const seed = 1;
 
 /**
  * Calculate the coordinates for a specific angle
@@ -145,6 +149,8 @@ const clip = (context, createMask, createContents) => {
  * @param {{ context: CanvasRenderingContext2D, width: number, height: number }} options
  */
 const sketch = ({ width, height }) => {
+  random.setSeed(seed);
+
   const repeats = 40;
   const degrees = -30;
 
