@@ -5,13 +5,14 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "canvas-sketch-cli --open sketch.js"
+    "dev": "canvas-sketch-cli sketch.js"
   },
   "keywords": [],
   "author": "Gavin King <plumpnation@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "canvas-sketch": "0.7.6"
+    "canvas-sketch": "0.7.6",
+    "canvas-sketch-util": "1.10.0"
   },
   "devDependencies": {
     "canvas-sketch-cli": "1.11.20"
