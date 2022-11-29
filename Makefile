@@ -4,8 +4,8 @@ triangle:
 lines:
 	pnpm run lines
 
-multiline-curves:
-	pnpm run multiline-curves
+curves:
+	pnpm run curves
 
 install:
 	pnpm install

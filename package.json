@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "triangle": "canvas-sketch sketches/triangle.js",
     "lines": "canvas-sketch sketches/lines.js",
-    "multiline-curves": "canvas-sketch sketches/multiline-curves.js"
+    "curves": "canvas-sketch sketches/curves.js"
   },
   "keywords": [],
   "author": "Gavin King <plumpnation@gmail.com>",
