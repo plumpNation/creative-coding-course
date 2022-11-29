@@ -35,7 +35,6 @@ class Point {
   }
 
   /**
-   *
    * @param {CanvasRenderingContext2D} context
    * @param {{ fill: FillStyle }} [options]
    */

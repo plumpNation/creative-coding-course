@@ -71,7 +71,7 @@ const getCartesianCoords = (angle, radius) => {
 
   return {
     x: Math.cos(radians) * radius,
-    y: Math.sin(radians) * radius
+    y: Math.sin(radians) * radius,
   };
 };
 
@@ -82,45 +82,35 @@ class Shadow {
   /** @type {CanvasRenderingContext2D} */
   context;
 
-  /**
-   * @param {CanvasRenderingContext2D} context
-   */
+  /** @param {CanvasRenderingContext2D} context */
   constructor (context) {
     this.context = context;
 
     context.shadowColor = 'rgba(0, 0, 0, 1)';
   }
 
-  /**
-   * @param {string} color
-   */
+  /** @param {string} color */
   color = (color) => {
     this.context.shadowColor = color;
 
     return this;
   };
 
-  /**
-   * @param {number} value
-   */
+  /** @param {number} value */
   offsetX = (value) => {
     this.context.shadowOffsetX = value;
 
     return this;
   };
 
-  /**
-   * @param {number} value
-   */
+  /** @param {number} value */
   offsetY = (value) => {
     this.context.shadowOffsetY = value;
 
     return this;
   };
 
-  /**
-   * @param {number} value
-   */
+  /** @param {number} value */
   blur = (value) => {
     this.context.shadowBlur = value;
 
