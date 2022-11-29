@@ -116,6 +116,12 @@ const handleMouseDown = (canvas) => (event) => {
   points.forEach(point => {
     point.isDragging = point.hitTest(x, y);
   });
+
+  const hit = points.some(point => point.isDragging);
+
+  if (!hit) {
+    points.push(new Point(x, y));
+  }
 };
 
 /**
