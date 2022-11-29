@@ -1,19 +1,21 @@
 const canvasSketch = require('canvas-sketch');
 const randomUtils = require('canvas-sketch-util/random');
-const random = require('canvas-sketch-util/random');
 const colorUtils = require('canvas-sketch-util/color');
-const risoColors = require('riso-colors');
 
+const colors = require('./common/colors');
 const { clip, subContext, centerTranslation, deriveLesserColor, shadow } = require('./common/helper');
 const { drawPolygon, drawSkewedRectangle } = require('./common/shapes');
 
 // Change for new artwork
 const seed = 1; // random.getRandomSeed();
 
-const artboard = 1000
+const artboard = 1000;
+
+/** @type {[number, number]} */
+const dimensions = [artboard, artboard];
 
 const settings = {
-  dimensions: [ artboard, artboard ],
+  dimensions,
   // animate: true,
   fps: 60,
   name: 'triangle-' + seed, // use the seed as the name
@@ -22,11 +24,9 @@ const settings = {
 /**
  * This is the main application controller.
  * It is run by the canvas-sketch application.
- *
- * @param {{ context: CanvasRenderingContext2D, width: number, height: number }} options
  */
 const sketch = ({ width, height }) => {
-  random.setSeed(seed);
+  randomUtils.setSeed(seed);
 
   const repeats = 40;
   const degrees = -30;
@@ -34,11 +34,11 @@ const sketch = ({ width, height }) => {
   const rectangles = [];
 
   const rectColors = [
-    randomUtils.pick(risoColors).hex,
-    randomUtils.pick(risoColors).hex
-  ]
+    randomUtils.pick(colors).hex,
+    randomUtils.pick(colors).hex
+  ];
 
-  const bgColor = randomUtils.pick(risoColors).hex;
+  const bgColor = randomUtils.pick(colors).hex;
   const outerPolyStrokeColor = randomUtils.pick(rectColors);
 
   const maskOptions = {
@@ -65,15 +65,13 @@ const sketch = ({ width, height }) => {
 
     const h = randomUtils.range(rectMaxHeight - (rectMaxHeight * 0.9), rectMaxHeight);
 
-    console.log(h)
+    console.log(h);
 
     rectangles.push({ x, y, w, h, fill, stroke });
   }
 
   /**
    * This is the render function
-   *
-   * @param {{ context: CanvasRenderingContext2D, width: number, height: number }} options
    */
   return ({ context, width, height }) => {
     context.fillStyle = bgColor;
@@ -99,7 +97,7 @@ const sketch = ({ width, height }) => {
           // Randomly use overlay blend mode on rectangle.
           context.globalCompositeOperation = randomUtils.value() > 0.5 ? 'overlay' : 'source-over';
 
-          drawSkewedRectangle(context, { w, h, degrees })
+          drawSkewedRectangle(context, { w, h, degrees });
 
           subContext(context, () => {
             // ADD SHADOW TO THE FILL

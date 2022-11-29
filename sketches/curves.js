@@ -4,8 +4,9 @@ const Point = require('./common/Point');
 const { setupPointInteractions } = require('./common/point-interactions');
 
 const settings = {
-  dimensions: [1000, 1000],
-  animate: true,
+  /** @type {[number, number]} */
+  dimensions: [1080, 1080],
+  animate: true
 };
 
 /** @type {Point[]} */

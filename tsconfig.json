@@ -5,7 +5,11 @@
     "sourceMap": true,
     "allowJs": true,
     "noEmit": true,
-    "checkJs": true
+    "checkJs": true,
+    "paths": {
+      "canvas-sketch": ["./node_modules/canvas-sketch-types/canvas-sketch"],
+      "canvas-sketch/*": ["./node_modules/canvas-sketch-types/canvas-sketch/*"]
+    }
   },
   "exclude": [
     "node_modules"
