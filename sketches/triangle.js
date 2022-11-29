@@ -1,9 +1,11 @@
 const canvasSketch = require('canvas-sketch');
-const mathUtils = require('canvas-sketch-util/math');
 const randomUtils = require('canvas-sketch-util/random');
+const random = require('canvas-sketch-util/random');
 const colorUtils = require('canvas-sketch-util/color');
 const risoColors = require('riso-colors');
-const random = require('canvas-sketch-util/random');
+
+const { clip, subContext, centerTranslation, deriveLesserColor, shadow } = require('./common/helper');
+const { drawPolygon, drawSkewedRectangle } = require('./common/shapes');
 
 // Change for new artwork
 const seed = 1; // random.getRandomSeed();
@@ -18,132 +20,6 @@ const settings = {
 };
 
 /**
- * Calculate the coordinates for a specific angle
- * at a specific radius from starting point.
- *
- * @param {number} angle
- * @param {number} radius
- * @returns {{x: number, y: number}}
- */
-const getCartesianCoords = (angle, radius) => {
-  const radians =  mathUtils.degToRad(angle)
-
-  return {
-    x: Math.cos(radians) * radius,
-    y: Math.sin(radians) * radius
-  }
-}
-
-/**
- * @param {CanvasRenderingContext2D} context
- * @param {{ degrees: number; w: number; h: number; }} options
- */
-const drawSkewedRectangle = (context, {
-  degrees,
-  w = 600,
-  h = 200
-}) => {
-  const { x, y } = getCartesianCoords(degrees, w);
-
-  context.translate(x * -0.5, (y + h) * -0.5); // move draw origin
-
-  context.beginPath();
-  context.moveTo(0, 0);
-  context.lineTo(x, y);
-  context.lineTo(x, y + h);
-  context.lineTo(0, h);
-  context.closePath();
-}
-
-/**
- * @param {CanvasRenderingContext2D} context
- * @param {{ radius: number, sides: number }} options
- */
-const drawPolygon = (context, { radius = 300, sides = 6 }) => {
-  const slice = Math.PI * 2 / sides;
-
-  context.beginPath();
-  context.moveTo(0, -radius);
-
-  for (let i = 0; i < sides; i++) {
-    const theta = i * slice - Math.PI * 0.5;
-
-    context.lineTo(
-      Math.cos(theta) * radius,
-      Math.sin(theta) * radius,
-    );
-  }
-
-  context.closePath();
-}
-
-/**
- *
- * @param {string} color
- * @param {number} luminance HSL Luminance
- * @param {number} opacity Alpha channel decimal
- * @returns {string} rgba style value
- */
-const deriveLesserColor = (color, luminance, opacity) => {
-  const result = colorUtils.offsetHSL(color, 0, 0, luminance);
-
-  result.rgba[3] = opacity;
-
-  return result.rgba
-}
-
-/**
- * @param {CanvasRenderingContext2D} context
- * @param {number} width
- * @param {number} height
- */
-const centerTranslation = (context, width, height) => {
-  // 0.58 is a hack to centre the triangle in the easiest way
-  context.translate(width * 0.5, height * 0.58);
-}
-
-/**
- * Safe and predictable way to enforce context is always restored.
- *
- * @param {CanvasRenderingContext2D} context
- * @param {() => {}} cb
- */
-const subContext = (context, cb) => {
-  context.save();
-  cb();
-  context.restore();
-};
-
-/**
- * @param {CanvasRenderingContext2D} context
- * @param {{ color: string; offsetX: number; offsetY: number; blur: number }} options
- */
-const configureShadow = (context, {
-  color = 'rgba(0, 0, 0, 1)',
-  offsetX = 0,
-  offsetY = 0,
-  blur = 0
-}) => {
-  context.shadowColor = color;
-  context.shadowOffsetX = offsetX;
-  context.shadowOffsetY = offsetY;
-  context.shadowBlur = blur
-};
-
-/**
- * Create a mask, and add contents.
- * @param {CanvasRenderingContext2D} context
- * @param {() => void} createMask
- * @param {() => void} createContents
- */
-const clip = (context, createMask, createContents) => {
-  createMask();
-  context.clip();
-  createContents();
-  context.restore(); // needed after clip
-}
-
-/**
  * This is the main application controller.
  * It is run by the canvas-sketch application.
  *
@@ -155,7 +31,7 @@ const sketch = ({ width, height }) => {
   const repeats = 40;
   const degrees = -30;
 
-  const rects = [];
+  const rectangles = [];
 
   const rectColors = [
     randomUtils.pick(risoColors).hex,
@@ -191,7 +67,7 @@ const sketch = ({ width, height }) => {
 
     console.log(h)
 
-    rects.push({ x, y, w, h, fill, stroke });
+    rectangles.push({ x, y, w, h, fill, stroke });
   }
 
   /**
@@ -212,7 +88,7 @@ const sketch = ({ width, height }) => {
       });
     }, () => {
       // mask contents
-      rects.forEach(({ x, y, w, h, fill, stroke }) => {
+      rectangles.forEach(({ x, y, w, h, fill, stroke }) => {
         subContext(context, () => {
           // DRAW A RECTANGLE
           context.translate(x, y);
@@ -227,12 +103,11 @@ const sketch = ({ width, height }) => {
 
           subContext(context, () => {
             // ADD SHADOW TO THE FILL
-            configureShadow(context, {
-              color: colorUtils.style(deriveLesserColor(fill, -20, 0.8)),
-              offsetX: -10,
-              offsetY: 20,
-              blur: 8,
-            });
+            shadow(context)
+              .color(colorUtils.style(deriveLesserColor(fill, -20, 0.8)))
+              .offsetX(-10)
+              .offsetY(20)
+              .blur(8);
 
             context.fill();
           });
@@ -261,12 +136,11 @@ const sketch = ({ width, height }) => {
 
       subContext(context, () => {
         // ADD SHADOWN TO OUTER TRIANGLE FRAME
-        configureShadow(context, {
-          color: colorUtils.style(deriveLesserColor('black', -10, 0.5)),
-          offsetX: 0,
-          offsetY: 10,
-          blur: 10,
-        });
+        shadow(context)
+          .color(colorUtils.style(deriveLesserColor('black', -10, 0.5)))
+          .offsetX(0)
+          .offsetY(10)
+          .blur(10);
 
         context.stroke();
       });
