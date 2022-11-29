@@ -23,6 +23,10 @@ sketch-lines: ## Run lines sketch
 
 sketch-curves: ## Run curves sketch
 	pnpm run sketch:curves
+
+sketch-grid: ## Run grid sketch
+	pnpm run sketch:grid
+
 install: ## Install dependencies
 	pnpm install
 

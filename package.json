@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "sketch:triangle": "canvas-sketch sketches/triangle.js",
     "sketch:lines": "canvas-sketch sketches/lines.js",
-    "sketch:curves": "canvas-sketch sketches/curves.js"
+    "sketch:curves": "canvas-sketch sketches/curves.js",
+    "sketch:grid": "canvas-sketch sketches/grid.js"
   },
   "keywords": [],
   "author": "Gavin King <plumpnation@gmail.com>",
