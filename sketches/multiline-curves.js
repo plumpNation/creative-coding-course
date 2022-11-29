@@ -2,7 +2,7 @@ const canvasSketch = require('canvas-sketch');
 
 const settings = {
   dimensions: [ 1000, 1000 ],
-  // animate: true,
+  animate: true,
 };
 
 let points;
@@ -44,6 +44,8 @@ const sketch = ({ canvas }) => {
     points.forEach((currentPoint, index) => {
       // Ignore the last one
       if (index === points.length - 1) {
+        // Comment this line to make curve end at midpoint.
+        // context.quadraticCurveTo(currentPoint.x, currentPoint.y, currentPoint.x, currentPoint.y);
         return
       }
 
@@ -52,14 +54,14 @@ const sketch = ({ canvas }) => {
       const mx = currentPoint.x + (nextPoint.x - currentPoint.x) * 0.5;
       const my = currentPoint.y + (nextPoint.y - currentPoint.y) * 0.5;
 
-      // Draw midway point
-      // context.beginPath();
-      // context.arc(mx, my, 5, 0, Math.PI * 2);
-      // context.fillStyle = 'red';
-      // context.fill();
-
       if (index === 0) {
-        context.moveTo(mx, my);
+        // Comment this out if you want to start at the midpoint
+        context.moveTo(currentPoint.x, currentPoint.y);
+        // To start at the midpoint
+        // context.moveTo(mx, my);
+      } else if (index === points.length - 2) {
+        // Comment this out if you want to end at the midpoint
+        context.quadraticCurveTo(currentPoint.x, currentPoint.y, nextPoint.x, nextPoint.y);
       } else {
         context.quadraticCurveTo(currentPoint.x, currentPoint.y, mx, my);
       }
