@@ -5,9 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "triangle": "canvas-sketch sketches/triangle.js",
-    "lines": "canvas-sketch sketches/lines.js",
-    "curves": "canvas-sketch sketches/curves.js"
+    "sketch:triangle": "canvas-sketch sketches/triangle.js",
+    "sketch:lines": "canvas-sketch sketches/lines.js",
+    "sketch:curves": "canvas-sketch sketches/curves.js"
   },
   "keywords": [],
   "author": "Gavin King <plumpnation@gmail.com>",

@@ -6,19 +6,26 @@ ifeq (new, $(firstword $(MAKECMDGOALS)))
   $(eval $(NEW_ARG):;@:)
 endif
 
-triangle:
-	pnpm run triangle
+HELP_TARGET_COLUMN_WIDTH := 30
 
-lines:
-	pnpm run lines
+.DEFAULT_GOAL := help
 
-curves:
-	pnpm run curves
+help: ## Display target descriptions
+	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) \
+	| sort \
+	| awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-$(HELP_TARGET_COLUMN_WIDTH)s\033[0m %s\n", $$1, $$2}'
 
-install:
+sketch-triangle: ## Run triangle sketch
+	pnpm run sketch:triangle
+
+sketch-lines: ## Run lines sketch
+	pnpm run sketch:lines
+
+sketch-curves: ## Run curves sketch
+	pnpm run sketch:curves
+install: ## Install dependencies
 	pnpm install
 
-new: ## Create a new sketch
-## Usage: make new [sketch name]
+new: ## Create a new sketch. Usage: make new [sketch name]
 	npx canvas-sketch sketches/$(NEW_ARG).js --new
 
