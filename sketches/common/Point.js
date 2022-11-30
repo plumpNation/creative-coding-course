@@ -36,16 +36,18 @@ class Point {
 
   /**
    * @param {CanvasRenderingContext2D} context
-   * @param {{ fill: FillStyle }} [options]
+   * @param {{ size: number, fill: FillStyle }} [options]
    */
   draw (context, options) {
+    const size = options?.size ?? 10;
+
     context.save();
     context.translate(this.x, this.y);
 
     context.fillStyle = options?.fill || (this._isControl ? 'red' : 'black');
 
     context.beginPath();
-    context.arc(0, 0, 10, 0, Math.PI * 2);
+    context.arc(0, 0, size, 0, Math.PI * 2);
     context.fill();
 
     context.restore();
