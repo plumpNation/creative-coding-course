@@ -165,9 +165,9 @@ class Grid {
 
   /**
    * @param {CanvasRenderingContext2D} context
-   * @param {{ pointFill: FillStyle, pointSize: number }} [options]
+   * @param {{ color?: FillStyle, radius?: number }} [options]
    */
-  draw (context, options) {
+  drawPoints (context, options) {
     if (!this.#_points.length) {
       this.build();
     }
@@ -180,8 +180,8 @@ class Grid {
 
     this.#_points.forEach(point => {
       point.draw(context, {
-        fill: options?.pointFill || this.#_pointFill,
-        size: options?.pointSize || this.#_pointSize,
+        fill: options?.color || this.#_pointFill,
+        size: options?.radius || this.#_pointSize,
       });
     });
 

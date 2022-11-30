@@ -18,7 +18,8 @@ const sketch = ({ width, height }) => {
     context.fillStyle = 'black';
     context.fillRect(0, 0, width, height);
 
-    grid1.draw(context, { pointFill: 'red' });
+    grid1
+      .drawPoints(context, { color: 'red', radius: 5 })
   };
 };
 
