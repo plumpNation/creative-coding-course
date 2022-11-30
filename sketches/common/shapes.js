@@ -1,3 +1,5 @@
+const random = require('canvas-sketch-util/random');
+
 const { getCartesianCoords } = require('./helper');
 const Point = require('./Point');
 
@@ -46,55 +48,70 @@ const drawSkewedRectangle = (context, {
 
 class Grid {
   /** @type {Point[]} */
-  _points = [];
-  /** @type {number} */
-  _width = 300;
-  /** @type {number} */
-  _height = 300;
-  /** @type {number} */
-  _margin = 0.5;
-  /** @type {number} */
-  _columns = 5;
-  /** @type {number} */
-  _rows = 5;
+  #_points = [];
+
+  #_width = 300;
+  #_height = 300;
+  #_margin = 0.5; // 0.5 is centered given width and height
+  #_columns = 5;
+  #_rows = 5;
   /** @type {FillStyle} */
-  _pointFill = 'red';
+  #_pointFill = 'red';
+  #_pointSize = 10;
+
+  /** @type {number | undefined} */
+  #_cellWidth;
+  /** @type {number | undefined} */
+  #_cellHeight;
+
+  /** @type {{ frequency: number; amplitude: number; } | undefined} */
+  #_noise;
 
   /** @param {number} value */
   width (value) {
-    this._width = value;
+    this.#_width = value;
 
     return this;
   }
 
   /** @param {number} value */
   height (value) {
-    this._height = value;
+    this.#_height = value;
 
     return this;
   }
 
   /** @param {number} value */
   columns (value) {
-    this._columns = value;
+    this.#_columns = value;
 
     return this;
   }
 
   /** @param {number} value */
   rows (value) {
-    this._rows = value;
+    this.#_rows = value;
+
+    return this;
+  }
+
+  /**
+   * @param {number} frequency
+   * @param {number} amplitude
+   */
+  noise (frequency, amplitude) {
+    this.#_noise = { frequency, amplitude };
 
     return this;
   }
 
   _createPoints (cellWidth, cellHeight) {
-    const numCells = this._columns * this._rows;
+    const numCells = this.#_columns * this.#_rows;
     const points = [];
 
     for (let i = 0; i < numCells; i++) {
-      const x = (i % this._columns) * cellWidth;
-      const y = Math.floor(i / this._columns) * cellHeight;
+      const x = (i % this.#_columns) * cellWidth;
+      const y = Math.floor(i / this.#_columns) * cellHeight;
 
       points.push(new Point(x, y));
     }
@@ -102,40 +119,70 @@ class Grid {
     return points;
   }
 
+  get translation () {
+    // Centering the grid means we need to figure out
+    // a nice equal distance from each side of the width.
+    const x = this.#_cellWidth * this.#_margin;
+    const y = this.#_cellHeight * this.#_margin;
+
+    return { x, y };
+  }
+
+  get points () {
+    return this.#_points;
+  }
+
   /**
-   * @param {CanvasRenderingContext2D} context
-   * @param {{ pointFill: FillStyle }} [options]
+   * Generate all the computed properties without drawing.
    */
-  draw (context, options) {
-    /** @type {Point[]} */
-    const points = [];
+  build () {
+    const numCells = this.#_columns * this.#_rows;
 
-    const numCells = this._columns * this._rows;
-
-    const gridWidth = this._width;
-    const gridHeight = this._height;
-
-    const cellWidth = gridWidth / this._columns;
-    const cellHeight = gridHeight / this._rows;
+    this.#_cellWidth = this.#_width / this.#_columns;
+    this.#_cellHeight = this.#_height / this.#_rows;
 
     for (let i = 0; i < numCells; i++) {
-      const x = (i % this._columns) * cellWidth;
-      const y = Math.floor(i / this._columns) * cellHeight;
+      let columnX = (i % this.#_columns) * this.#_cellWidth;
+      let rowY = Math.floor(i / this.#_columns) * this.#_cellHeight;
 
-      points.push(new Point(x, y));
+      if (this.#_noise) {
+        const noise = random.noise2D(
+          columnX,
+          rowY,
+          this.#_noise.frequency,
+          this.#_noise.amplitude,
+        );
+
+        columnX += noise;
+        rowY += noise;
+      }
+
+      this.#_points.push(new Point(columnX, rowY));
+    }
+
+    return this;
+  }
+
+  /**
+   * @param {CanvasRenderingContext2D} context
+   * @param {{ pointFill: FillStyle, pointSize: number }} [options]
+   */
+  draw (context, options) {
+    if (!this.#_points.length) {
+      this.build();
     }
 
     context.save();
 
-    // Centering the grid means we need to figure out
-    // a nice equal distance from each side of the width.
-    const mx = cellWidth * 0.5;
-    const my = cellHeight * 0.5;
+    const { x: mx, y: my } = this.translation;
 
     context.translate(mx, my);
 
-    points.forEach(point => {
-      point.draw(context, { fill: options.pointFill || this._pointFill });
+    this.#_points.forEach(point => {
+      point.draw(context, {
+        fill: options?.pointFill || this.#_pointFill,
+        size: options?.pointSize || this.#_pointSize,
+      });
     });
 
     context.restore();
