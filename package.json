@@ -25,6 +25,7 @@
   },
   "devDependencies": {
     "canvas-sketch-cli": "1.11.20",
-    "canvas-sketch-types": "1.1.2"
+    "canvas-sketch-types": "1.1.2",
+    "@types/canvas-sketch-util": "git@github.com:plumpNation/canvas-sketch-util-types.git#v1.0.0"
   }
 }

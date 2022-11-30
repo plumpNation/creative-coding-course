@@ -1,6 +1,7 @@
 lockfileVersion: 5.4
 
 specifiers:
+  '@types/canvas-sketch-util': git@github.com:plumpNation/canvas-sketch-util-types.git#v1.0.0
   canvas-sketch: 0.7.6
   canvas-sketch-cli: 1.11.20
   canvas-sketch-types: 1.1.2
@@ -23,6 +24,7 @@ dependencies:
   riso-colors: 1.0.1
 
 devDependencies:
+  '@types/canvas-sketch-util': github.com/plumpNation/canvas-sketch-util-types/858a70b59ba5ad354a904517c4f2eb2c4f9b0eb0
   canvas-sketch-cli: 1.11.20
   canvas-sketch-types: 1.1.2
 
@@ -4486,3 +4488,9 @@ packages:
     resolution: {integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==}
     engines: {node: '>=10'}
     dev: false
+
+  github.com/plumpNation/canvas-sketch-util-types/858a70b59ba5ad354a904517c4f2eb2c4f9b0eb0:
+    resolution: {tarball: https://codeload.github.com/plumpNation/canvas-sketch-util-types/tar.gz/858a70b59ba5ad354a904517c4f2eb2c4f9b0eb0}
+    name: canvas-sketch-util-types
+    version: 1.0.0
+    dev: true
