@@ -46,6 +46,40 @@ const drawSkewedRectangle = (context, {
   context.closePath();
 };
 
+/**
+ * @param {FillStyle | (() => FillStyle) | undefined} color
+ * @param {FillStyle} [defaultColor]
+ * @return {FillStyle}
+ */
+const determineStrokeColor = (color, defaultColor = 'red') => {
+  if (typeof color === 'string') {
+    return color;
+  }
+
+  if (typeof color === 'function') {
+    return color();
+  }
+
+  return defaultColor;
+};
+
+/**
+   * @param {number | (() => number) | undefined} width
+   * @param {number} [defaultWidth]
+   * @return {number}
+   */
+const determineStrokeWidth = (width, defaultWidth = 4) => {
+  if (typeof width === 'number') {
+    return width;
+  }
+
+  if (typeof width === 'function') {
+    width = width();
+  }
+
+  return defaultWidth;
+};
+
 class Grid {
   /** @type {Point[]} */
   #_points = [];
@@ -232,6 +266,55 @@ class Grid {
       }
 
       context.stroke();
+    }
+
+    return this;
+  }
+
+  /**
+   * @param {CanvasRenderingContext2D} context
+   * @param {{ color?: FillStyle | (() => FillStyle), width?: number | (() => number) }} [options]
+   */
+  drawSegmentRowCurves (context, options) {
+    if (!this.#_points.length) {
+      this.build();
+    }
+
+    context.translate(this.translation.x, this.translation.y);
+
+    let lastX, lastY;
+
+    for (let r = 0; r < this.#_rows; r++) {
+      for (let c = 0; c < this.#_columns - 1; c++) {
+        context.strokeStyle = determineStrokeColor(options?.color);
+        context.lineWidth = determineStrokeWidth(options?.width);
+
+        const curr = this.points[r * this.#_columns + c + 0];
+        const next = this.points[r * this.#_columns + c + 1];
+
+        const mx = curr.x + (next.x - curr.x) * 0.5;
+        const my = curr.y + (next.y - curr.y) * 0.5;
+
+        if (c === 0) {
+          lastX = curr.x;
+          lastY = curr.y;
+        }
+
+        context.beginPath();
+
+        context.moveTo(lastX, lastY);
+
+        // if (c === this.#_columns - 1) {
+        //   context.quadraticCurveTo(lastX, lastY, curr.x, curr.y);
+        // } else {
+        // }
+        context.quadraticCurveTo(curr.x, curr.y, mx, my);
+
+        context.stroke();
+
+        lastX = mx;
+        lastY = my;
+      }
     }
 
     return this;

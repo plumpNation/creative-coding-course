@@ -1,4 +1,5 @@
 const canvasSketch = require('canvas-sketch');
+const random = require('canvas-sketch-util/random');
 
 const { grid } = require('./common/shapes');
 
@@ -24,8 +25,10 @@ const sketch = ({ width, height }) => {
     context.fillRect(0, 0, width, height);
 
     grid1
-      .drawPoints(context, { color: 'red', radius: 5 })
-      .drawRowCurves(context, { color: 'blue' });
+      .drawPoints(context, { color: 'red', radius: 10 })
+      .drawSegmentRowCurves(context, {
+        color: () => random.pick(['red', 'blue', 'yellow', 'orange', 'white', 'green']),
+      });
   };
 };
 
