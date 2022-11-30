@@ -129,8 +129,8 @@ class Grid {
 
     // Centering the grid means we need to figure out
     // a nice equal distance from each side of the width.
-    const mx = (this._width / this._columns + 2) * 0.5;
-    const my = (this._height / this._rows + 2) * 0.5;
+    const mx = cellWidth * 0.5;
+    const my = cellHeight * 0.5;
 
     context.translate(mx, my);
 
