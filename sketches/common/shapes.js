@@ -119,6 +119,10 @@ class Grid {
     return points;
   }
 
+  /**
+   * Exposing translation means that it's easier to match up
+   * other components with this one.
+   */
   get translation () {
     // Centering the grid means we need to figure out
     // a nice equal distance from each side of the width.
@@ -128,6 +132,10 @@ class Grid {
     return { x, y };
   }
 
+  /**
+   * Exposing points so they can be used (with translation)
+   * to draw with.
+   */
   get points () {
     return this.#_points;
   }
