@@ -1,6 +1,7 @@
-const random = require('canvas-sketch-util/random');
+const randomUtils = require('canvas-sketch-util/random');
+const mathUtils = require('canvas-sketch-util/math');
 
-const { getCartesianCoords } = require('./helper');
+const { getCartesianCoords, shadow } = require('./helper');
 const Point = require('./Point');
 
 /**
@@ -68,17 +69,17 @@ const determineStrokeColor = (color, defaultColor = 'red') => {
    * @param {number} [defaultWidth]
    * @return {number}
    */
-const determineStrokeWidth = (width, defaultWidth = 4) => {
-  if (typeof width === 'number') {
-    return width;
-  }
+// const determineStrokeWidth = (width, defaultWidth = 4) => {
+//   if (typeof width === 'number') {
+//     return width;
+//   }
 
-  if (typeof width === 'function') {
-    width = width();
-  }
+//   if (typeof width === 'function') {
+//     width = width();
+//   }
 
-  return defaultWidth;
-};
+//   return defaultWidth;
+// };
 
 class Grid {
   /** @type {Point[]} */
@@ -187,8 +188,10 @@ class Grid {
       let columnX = (i % this.#_columns) * this.#_cellWidth;
       let rowY = Math.floor(i / this.#_columns) * this.#_cellHeight;
 
+      let lineWidth;
+
       if (this.#_noise) {
-        const noise = random.noise2D(
+        const noise = randomUtils.noise2D(
           columnX,
           rowY,
           this.#_noise.frequency,
@@ -197,9 +200,17 @@ class Grid {
 
         columnX += noise;
         rowY += noise;
+
+        lineWidth = mathUtils.mapRange(
+          noise,
+          -this.#_noise.amplitude,
+          this.#_noise.amplitude,
+          2,
+          20,
+        );
       }
 
-      this.#_points.push(new Point(columnX, rowY));
+      this.#_points.push(new Point(columnX, rowY, { lineWidth }));
     }
 
     return this;
@@ -207,7 +218,7 @@ class Grid {
 
   /**
    * @param {CanvasRenderingContext2D} context
-   * @param {{ color?: FillStyle, radius?: number }} [options]
+   * @param {{ color?: FillStyle, radius?: number, shadow?: { color: string, blur?: number } }} [options]
    */
   drawPoints (context, options) {
     if (!this.#_points.length) {
@@ -220,10 +231,16 @@ class Grid {
 
     context.translate(mx, my);
 
+    if (options?.shadow) {
+      shadow(context)
+        .blur(options.shadow.blur || 10)
+        .color(options.shadow.color || 'black');
+    }
+
     this.#_points.forEach(point => {
       point.draw(context, {
-        fill: options?.color || this.#_pointFill,
-        size: options?.radius || this.#_pointSize,
+        color: options?.color ?? this.#_pointFill,
+        size: options?.radius ?? this.#_pointSize,
       });
     });
 
@@ -280,17 +297,19 @@ class Grid {
       this.build();
     }
 
+    context.save();
+
     context.translate(this.translation.x, this.translation.y);
 
     let lastX, lastY;
 
     for (let r = 0; r < this.#_rows; r++) {
-      for (let c = 0; c < this.#_columns - 1; c++) {
-        context.strokeStyle = determineStrokeColor(options?.color);
-        context.lineWidth = determineStrokeWidth(options?.width);
+      for (let c = 0; c < this.#_columns; c++) {
+        const pointIndex = r * this.#_columns + c + 0;
+        const nextPointIndex = c === this.#_columns - 1 ? pointIndex : pointIndex + 1;
 
-        const curr = this.points[r * this.#_columns + c + 0];
-        const next = this.points[r * this.#_columns + c + 1];
+        const curr = this.points[pointIndex];
+        const next = this.points[nextPointIndex];
 
         const mx = curr.x + (next.x - curr.x) * 0.5;
         const my = curr.y + (next.y - curr.y) * 0.5;
@@ -302,13 +321,20 @@ class Grid {
 
         context.beginPath();
 
+        // There may be performance problems with continously
+        // calling functions to calculate color.
+        // Perhaps don't do this if color is a single value.
+        context.strokeStyle = determineStrokeColor(options?.color);
+        // context.lineWidth = determineStrokeWidth(options?.width);
+        context.lineWidth = curr.metadata.lineWidth;
+
         context.moveTo(lastX, lastY);
 
-        // if (c === this.#_columns - 1) {
-        //   context.quadraticCurveTo(lastX, lastY, curr.x, curr.y);
-        // } else {
-        // }
-        context.quadraticCurveTo(curr.x, curr.y, mx, my);
+        if (c === this.#_columns - 1) {
+          context.quadraticCurveTo(lastX, lastY, curr.x, curr.y);
+        } else {
+          context.quadraticCurveTo(curr.x, curr.y, mx, my);
+        }
 
         context.stroke();
 
@@ -316,6 +342,8 @@ class Grid {
         lastY = my;
       }
     }
+
+    context.restore();
 
     return this;
   }

@@ -5,21 +5,19 @@ class Point {
   x;
   /** @type {number} */
   y;
-  /** @type {boolean} Is a control point i.e. on a quadratic curve. */
-  _isControl = false;
   /** @type {boolean} Is the point currently being dragged. */
   _isDragging = false;
+  metadata = {};
 
   /**
    * @param {number} x
    * @param {number} y
-   * @param {boolean} [isControl]
+   * @param {Record<string, unknown>} [metadata] Store arbitrary data on the point
    */
-  constructor (x, y, isControl) {
+  constructor (x, y, metadata) {
     this.x = x;
     this.y = y;
-
-    this._isControl = isControl;
+    this.metadata = metadata;
   }
 
   startDrag () {
@@ -36,7 +34,7 @@ class Point {
 
   /**
    * @param {CanvasRenderingContext2D} context
-   * @param {{ size: number, fill: FillStyle }} [options]
+   * @param {{ size?: number, color?: FillStyle }} [options]
    */
   draw (context, options) {
     const size = options?.size ?? 10;
@@ -44,7 +42,7 @@ class Point {
     context.save();
     context.translate(this.x, this.y);
 
-    context.fillStyle = options?.fill || (this._isControl ? 'red' : 'black');
+    context.fillStyle = options?.color || 'black';
 
     context.beginPath();
     context.arc(0, 0, size, 0, Math.PI * 2);
@@ -53,6 +51,10 @@ class Point {
     context.restore();
   }
 
+  /**
+   * @param {number} x
+   * @param {number} y
+   */
   hitTest (x, y) {
     const distance = calculateHypoteneuseLength(this.x, this.y, x, y);
 

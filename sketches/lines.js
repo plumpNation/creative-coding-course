@@ -10,7 +10,7 @@ const settings = {
 
 const points = [
   new Point(200, 540),
-  new Point(400, 300, true),
+  new Point(400, 300),
   new Point(800, 540),
 ];
 
@@ -36,8 +36,12 @@ const sketch = ({ canvas }) => {
 
     context.stroke();
 
-    points.forEach(point => {
-      point.draw(context);
+    points.forEach((point, index) => {
+      if (index === 1) {
+        point.draw(context, { color: 'red' });
+      } else {
+        point.draw(context);
+      }
     });
   };
 };
