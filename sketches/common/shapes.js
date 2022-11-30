@@ -236,6 +236,39 @@ class Grid {
 
     return this;
   }
+
+  /**
+   * @param {CanvasRenderingContext2D} context
+   * @param {{ color?: FillStyle, width?: number }} [options]
+   */
+  drawRowLines (context, options) {
+    if (!this.#_points.length) {
+      this.build();
+    }
+
+    context.strokeStyle = options?.color ?? 'red';
+    context.lineWidth = options?.width ?? 4;
+
+    context.translate(this.translation.x, this.translation.y);
+
+    for (let r = 0; r < this.#_rows; r++) {
+      context.beginPath();
+
+      for (let c = 0; c < this.#_columns; c++) {
+        const curr = this.points[r * this.#_columns + c];
+
+        if (c === 0) {
+          context.moveTo(curr.x, curr.y);
+        } else {
+          context.lineTo(curr.x, curr.y);
+        }
+      }
+
+      context.stroke();
+    }
+
+    return this;
+  }
 }
 
 const grid = () => new Grid();
