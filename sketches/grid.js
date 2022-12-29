@@ -14,17 +14,18 @@ const settings = {
 };
 
 const sketch = ({ width, height }) => {
-  const numColumns = 40;
-  const numRows = 40;
+  const numColumns = 72;
+  const numRows = 8;
 
-  const amplitude = 90;
+  const frequency = 2;
+  const amplitude = 50;
 
   const grid1 = grid()
     .columns(numColumns)
     .rows(numRows)
     .width(width)
     .height(height)
-    .noise(2, amplitude)
+    .noise(frequency, amplitude)
     .build();
 
   // const segmentColors = [

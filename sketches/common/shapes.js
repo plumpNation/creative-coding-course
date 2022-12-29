@@ -302,8 +302,8 @@ class Grid {
         const curr = points[pointIndex];
         const next = points[nextPointIndex];
 
-        const mx = curr.x + (next.x - curr.x) * 0.5;
-        const my = curr.y + (next.y - curr.y) * 0.5;
+        const mx = curr.x + (next.x - curr.x) * 0.8;
+        const my = curr.y + (next.y - curr.y) * 5.5;
 
         if (c === 0) {
           lastX = curr.x;
@@ -327,8 +327,8 @@ class Grid {
             curr.noise,
             -this.#_noise.amplitude,
             this.#_noise.amplitude,
-            2,
-            20,
+            0,
+            5,
           )
           : 5;
 
@@ -342,8 +342,8 @@ class Grid {
 
         context.stroke();
 
-        lastX = mx;
-        lastY = my;
+        lastX = mx - c / this.#_columns * 250;
+        lastY = my - r / this.#_rows * 250;
       }
     }
 
