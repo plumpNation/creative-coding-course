@@ -7,3 +7,5 @@
 const risoColors = require('riso-colors');
 
 module.exports = risoColors;
+
+// @todo move colormap into here

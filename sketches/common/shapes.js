@@ -131,34 +131,20 @@ class Grid {
   }
 
   /**
-   * @param {number} frequency
+   * @param {number} frequency Make it easier to use by dividing by 1000
    * @param {number} amplitude
    */
   noise (frequency, amplitude) {
-    this.#_noise = { frequency, amplitude };
+    this.#_noise = { frequency: frequency * 0.001, amplitude };
 
     return this;
-  }
-
-  _createPoints (cellWidth, cellHeight) {
-    const numCells = this.#_columns * this.#_rows;
-    const points = [];
-
-    for (let i = 0; i < numCells; i++) {
-      const x = (i % this.#_columns) * cellWidth;
-      const y = Math.floor(i / this.#_columns) * cellHeight;
-
-      points.push(new Point(x, y));
-    }
-
-    return points;
   }
 
   /**
    * Exposing translation means that it's easier to match up
    * other components with this one.
    */
-  get translation () {
+  getTranslation () {
     // Centering the grid means we need to figure out
     // a nice equal distance from each side of the width.
     const x = this.#_cellWidth * this.#_margin;
@@ -171,8 +157,12 @@ class Grid {
    * Exposing points so they can be used (with translation)
    * to draw with.
    */
-  get points () {
+  getPoints () {
     return this.#_points;
+  }
+
+  getNoise () {
+    return this.#_noise;
   }
 
   /**
@@ -188,10 +178,11 @@ class Grid {
       let columnX = (i % this.#_columns) * this.#_cellWidth;
       let rowY = Math.floor(i / this.#_columns) * this.#_cellHeight;
 
-      let lineWidth;
+      /** @type number */
+      let noise;
 
       if (this.#_noise) {
-        const noise = randomUtils.noise2D(
+        noise = randomUtils.noise2D(
           columnX,
           rowY,
           this.#_noise.frequency,
@@ -200,17 +191,9 @@ class Grid {
 
         columnX += noise;
         rowY += noise;
-
-        lineWidth = mathUtils.mapRange(
-          noise,
-          -this.#_noise.amplitude,
-          this.#_noise.amplitude,
-          2,
-          20,
-        );
       }
 
-      this.#_points.push(new Point(columnX, rowY, { lineWidth }));
+      this.#_points.push(new Point(columnX, rowY, noise));
     }
 
     return this;
@@ -227,7 +210,7 @@ class Grid {
 
     context.save();
 
-    const { x: mx, y: my } = this.translation;
+    const { x: mx, y: my } = this.getTranslation();
 
     context.translate(mx, my);
 
@@ -261,14 +244,18 @@ class Grid {
     context.strokeStyle = options?.color ?? 'red';
     context.lineWidth = options?.width ?? 4;
 
-    context.translate(this.translation.x, this.translation.y);
+    const translation = this.getTranslation();
+
+    context.translate(translation.x, translation.y);
 
     for (let r = 0; r < this.#_rows; r++) {
       context.beginPath();
 
       for (let c = 0; c < this.#_columns - 1; c++) {
-        const curr = this.points[r * this.#_columns + c + 0];
-        const next = this.points[r * this.#_columns + c + 1];
+        const points = this.getPoints();
+
+        const curr = points[r * this.#_columns + c + 0];
+        const next = points[r * this.#_columns + c + 1];
 
         const mx = curr.x + (next.x - curr.x) * 0.5;
         const my = curr.y + (next.y - curr.y) * 0.5;
@@ -290,7 +277,7 @@ class Grid {
 
   /**
    * @param {CanvasRenderingContext2D} context
-   * @param {{ color?: FillStyle | (() => FillStyle), width?: number | (() => number) }} [options]
+   * @param {{ color?: FillStyle | ((pointNoise: number) => FillStyle), width?: number | ((pointNoise: number) => number) }} [options]
    */
   drawSegmentRowCurves (context, options) {
     if (!this.#_points.length) {
@@ -299,7 +286,9 @@ class Grid {
 
     context.save();
 
-    context.translate(this.translation.x, this.translation.y);
+    const translation = this.getTranslation();
+
+    context.translate(translation.x, translation.y);
 
     let lastX, lastY;
 
@@ -308,8 +297,10 @@ class Grid {
         const pointIndex = r * this.#_columns + c + 0;
         const nextPointIndex = c === this.#_columns - 1 ? pointIndex : pointIndex + 1;
 
-        const curr = this.points[pointIndex];
-        const next = this.points[nextPointIndex];
+        const points = this.getPoints();
+
+        const curr = points[pointIndex];
+        const next = points[nextPointIndex];
 
         const mx = curr.x + (next.x - curr.x) * 0.5;
         const my = curr.y + (next.y - curr.y) * 0.5;
@@ -324,9 +315,22 @@ class Grid {
         // There may be performance problems with continously
         // calling functions to calculate color.
         // Perhaps don't do this if color is a single value.
-        context.strokeStyle = determineStrokeColor(options?.color);
+        const strokeColor = typeof options?.color === 'function'
+          ? options?.color(curr.noise)
+          : options?.color;
+
+        context.strokeStyle = determineStrokeColor(strokeColor);
         // context.lineWidth = determineStrokeWidth(options?.width);
-        context.lineWidth = curr.metadata.lineWidth;
+
+        context.lineWidth = curr.noise
+          ? mathUtils.mapRange(
+            curr.noise,
+            -this.#_noise.amplitude,
+            this.#_noise.amplitude,
+            2,
+            20,
+          )
+          : 5;
 
         context.moveTo(lastX, lastY);
 
@@ -360,13 +364,15 @@ class Grid {
     context.strokeStyle = options?.color ?? 'red';
     context.lineWidth = options?.width ?? 4;
 
-    context.translate(this.translation.x, this.translation.y);
+    const translation = this.getTranslation();
+
+    context.translate(translation.x, translation.y);
 
     for (let r = 0; r < this.#_rows; r++) {
       context.beginPath();
 
       for (let c = 0; c < this.#_columns; c++) {
-        const curr = this.points[r * this.#_columns + c];
+        const curr = this.getPoints()[r * this.#_columns + c];
 
         if (c === 0) {
           context.moveTo(curr.x, curr.y);

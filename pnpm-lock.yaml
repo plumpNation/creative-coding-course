@@ -2,10 +2,12 @@ lockfileVersion: 5.4
 
 specifiers:
   '@types/canvas-sketch-util': npm:canvas-sketch-util-types
+  '@types/colormap': 2.3.1
   canvas-sketch: 0.7.6
   canvas-sketch-cli: 1.11.20
   canvas-sketch-types: 1.1.2
   canvas-sketch-util: 1.10.0
+  colormap: 2.3.2
   eslint: 8.28.0
   eslint-config-standard: 17.0.0
   eslint-plugin-import: 2.26.0
@@ -16,6 +18,7 @@ specifiers:
 dependencies:
   canvas-sketch: 0.7.6
   canvas-sketch-util: 1.10.0
+  colormap: 2.3.2
   eslint: 8.28.0
   eslint-config-standard: 17.0.0_5dakk4wnrkkieagghiqvu5yn4y
   eslint-plugin-import: 2.26.0_eslint@8.28.0
@@ -25,6 +28,7 @@ dependencies:
 
 devDependencies:
   '@types/canvas-sketch-util': /canvas-sketch-util-types/0.3.0
+  '@types/colormap': 2.3.1
   canvas-sketch-cli: 1.11.20
   canvas-sketch-types: 1.1.2
 
@@ -386,6 +390,10 @@ packages:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.13.0
     dev: false
+
+  /@types/colormap/2.3.1:
+    resolution: {integrity: sha512-GCPa0VCih4kp/TPPkjdjgUG19yCOPbpP9UpjEYTxUnIhaNqMrhlL9wSAyxm0cRfSubT3KUETZ+8vXYn6fmq0OQ==}
+    dev: true
 
   /@types/json5/0.0.29:
     resolution: {integrity: sha512-dRLjCWHYg4oaA77cxO64oO+7JwCwnIzkZPdrrC71jQmQtlhM556pwKo5bUzqvZndkVbeFLIIi+9TC40JNF5hNQ==}
@@ -1208,6 +1216,12 @@ packages:
 
   /color-name/1.1.4:
     resolution: {integrity: sha512-dOy+3AuW3a2wNbZHIuMZpTcgjGuLU/uBL/ubcZF9OXbDo8ff4O8yVp5Bf0efS8uEoYo5q4Fx7dY9OgQGXgAsQA==}
+    dev: false
+
+  /colormap/2.3.2:
+    resolution: {integrity: sha512-jDOjaoEEmA9AgA11B/jCSAvYE95r3wRoAyTf3LEHGiUVlNHJaL1mRkf5AyLSpQBVGfTEPwGEqCIzL+kgr2WgNA==}
+    dependencies:
+      lerp: 1.0.3
     dev: false
 
   /combine-source-map/0.8.0:
@@ -2825,6 +2839,10 @@ packages:
       inherits: 2.0.4
       stream-splicer: 2.0.1
     dev: true
+
+  /lerp/1.0.3:
+    resolution: {integrity: sha512-70Rh4rCkJDvwWiTsyZ1HmJGvnyfFah4m6iTux29XmasRiZPDBpT9Cfa4ai73+uLZxnlKruUS62jj2lb11wURiA==}
+    dev: false
 
   /levn/0.3.0:
     resolution: {integrity: sha512-0OO4y2iOHix2W6ujICbKIaEQXvFQHue65vUG3pb5EUomzPI90z9hsA1VsO/dbIIpC53J8gxM9Q4Oho0jrCM/yA==}

@@ -6,3 +6,6 @@ declare interface RisoColor {
   pantone: string;
   zType?: string;
 }
+
+declare type CreateColormap = typeof import('colormap')
+declare type Colormap = ReturnType<CreateColormap>

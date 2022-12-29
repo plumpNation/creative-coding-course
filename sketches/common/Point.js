@@ -5,19 +5,20 @@ class Point {
   x;
   /** @type {number} */
   y;
+  /** @type {number} */
+  noise;
   /** @type {boolean} Is the point currently being dragged. */
   _isDragging = false;
-  metadata = {};
 
   /**
    * @param {number} x
    * @param {number} y
-   * @param {Record<string, unknown>} [metadata] Store arbitrary data on the point
+   * @param {number | undefined | null} [noise]
    */
-  constructor (x, y, metadata) {
+  constructor (x, y, noise) {
     this.x = x;
     this.y = y;
-    this.metadata = metadata;
+    this.noise = noise || 0;
   }
 
   startDrag () {
