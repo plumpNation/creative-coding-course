@@ -1,11 +1,8 @@
 /**
- * This file is simply to get some typings onto the riso-colors array.
+ * Add typings onto the riso-colors array.
+ *
+ * @type {RisoColor[]}
  */
-
-/** @type {RisoColor[]} */
 // @ts-ignore
-const risoColors = require('riso-colors');
-
-module.exports = risoColors;
-
-// @todo move colormap into here
+exports.risoColors = require('riso-colors');
+exports.createColormap = require('colormap');

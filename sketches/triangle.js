@@ -2,7 +2,7 @@ const canvasSketch = require('canvas-sketch');
 const randomUtils = require('canvas-sketch-util/random');
 const colorUtils = require('canvas-sketch-util/color');
 
-const colors = require('./common/colors');
+const { risoColors: colors } = require('./common/colors');
 const { clip, subContext, centerTranslation, deriveLesserColor, shadow } = require('./common/helper');
 const { drawPolygon, drawSkewedRectangle } = require('./common/shapes');
 
@@ -35,7 +35,7 @@ const sketch = ({ width, height }) => {
 
   const rectColors = [
     randomUtils.pick(colors).hex,
-    randomUtils.pick(colors).hex
+    randomUtils.pick(colors).hex,
   ];
 
   const bgColor = randomUtils.pick(colors).hex;
