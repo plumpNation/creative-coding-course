@@ -9,12 +9,14 @@
     "sketch:lines": "canvas-sketch sketches/lines.js",
     "sketch:curves": "canvas-sketch sketches/curves.js",
     "sketch:grid": "canvas-sketch sketches/grid.js",
-    "sketch:animation": "canvas-sketch sketches/animation.js"
+    "sketch:animation": "canvas-sketch sketches/animation.js",
+    "sketch:animation:export": "canvas-sketch sketches/animation.js --output=saved-output --stream"
   },
   "keywords": [],
   "author": "Gavin King <plumpnation@gmail.com>",
   "license": "MIT",
   "dependencies": {
+    "@ffmpeg-installer/ffmpeg": "1.1.0",
     "canvas-sketch": "0.7.6",
     "canvas-sketch-util": "1.10.0",
     "colormap": "2.3.2",

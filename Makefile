@@ -30,6 +30,9 @@ sketch-grid: ## Run grid sketch
 sketch-animation: ## Run animation sketch
 	pnpm run sketch:animation
 
+sketch-animation-export: ## Run animation sketch and export mp4
+	pnpm run sketch:animation:export
+
 install: ## Install dependencies
 	pnpm install
 
