@@ -1,5 +1,3 @@
-const randomUtils = require('canvas-sketch-util/random');
-
 const { getCartesianCoords, shadow } = require('./helper');
 const Point = require('./Point');
 
@@ -130,16 +128,6 @@ class Grid {
   }
 
   /**
-   * @param {number} frequency Make it easier to use by dividing by 1000
-   * @param {number} amplitude
-   */
-  noise (frequency, amplitude) {
-    this.#_noise = { frequency: frequency * 0.001, amplitude };
-
-    return this;
-  }
-
-  /**
    * Exposing translation means that it's easier to match up
    * other components with this one.
    */
@@ -160,10 +148,6 @@ class Grid {
     return this.#_points;
   }
 
-  getNoise () {
-    return this.#_noise;
-  }
-
   /**
    * Generate all the computed properties without drawing.
    */
@@ -174,26 +158,11 @@ class Grid {
     this.#_cellHeight = this.#_height / this.#_rows;
 
     for (let i = 0; i < numCells; i++) {
-      let x = (i % this.#_columns) * this.#_cellWidth;
-      let y = Math.floor(i / this.#_columns) * this.#_cellHeight;
-
-      /** @type number */
-      let noise;
-
-      if (this.#_noise) {
-        noise = randomUtils.noise2D(
-          x,
-          y,
-          this.#_noise.frequency,
-          this.#_noise.amplitude,
-        );
-
-        x += noise;
-        y += noise;
-      }
+      const x = (i % this.#_columns) * this.#_cellWidth;
+      const y = Math.floor(i / this.#_columns) * this.#_cellHeight;
 
       // If animating, this is only the initial point positions.
-      this.#_points.push(new Point(x, y, noise));
+      this.#_points.push(new Point(x, y));
     }
 
     return this;
@@ -230,6 +199,17 @@ class Grid {
     });
 
     context.restore();
+
+    return this;
+  }
+
+  /**
+   * Most useful in the render tick to provide animation.
+   *
+   * @param {(point: Point) => void} mutateFn
+   */
+  mutatePoints (mutateFn) {
+    this.#_points.forEach(mutateFn);
 
     return this;
   }
@@ -281,12 +261,9 @@ class Grid {
 
   /**
    * Draw segmented quadrative curves through row points.
-   * Provide noise and width.
-   * @todo Maybe we don't need to pass noise, or line width?
-   *        Maybe we can use just one variable for this.
    *
    * @param {CanvasRenderingContext2D} context
-   * @param {{ color?: FillStyle | ((pointNoise: number) => FillStyle), width?: number | ((pointNoise: number) => number) }} [options]
+   * @param {{ color?: FillStyle | ((point: Point) => FillStyle), width?: number | ((point: Point) => number) }} [options]
    */
   drawSegmentRowCurves (context, options) {
     if (!this.#_points.length) {
@@ -325,11 +302,11 @@ class Grid {
         // calling functions to calculate color.
         // Perhaps don't do this if color is a single value.
         const strokeColor = typeof options?.color === 'function'
-          ? options?.color(curr.noise)
+          ? options?.color(curr)
           : options?.color;
 
         const strokeWidth = typeof options?.width === 'function'
-          ? options?.width(curr.noise)
+          ? options?.width(curr)
           : options?.width;
 
         context.strokeStyle = determineStrokeColor(strokeColor);

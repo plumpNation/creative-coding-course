@@ -5,20 +5,33 @@ class Point {
   x;
   /** @type {number} */
   y;
-  /** @type {number} */
-  noise;
+
+  /**
+   * For use with animation
+   *
+   * @type {number}
+   */
+  initialX;
+  /**
+   * For use with animation
+   *
+   * @type {number}
+   */
+  initialY;
+
   /** @type {boolean} Is the point currently being dragged. */
   _isDragging = false;
 
   /**
    * @param {number} x
    * @param {number} y
-   * @param {number | undefined | null} [noise]
    */
-  constructor (x, y, noise) {
+  constructor (x, y) {
     this.x = x;
     this.y = y;
-    this.noise = noise || 0;
+
+    this.initialX = x;
+    this.initialY = y;
   }
 
   startDrag () {
