@@ -174,31 +174,34 @@ class Grid {
     this.#_cellHeight = this.#_height / this.#_rows;
 
     for (let i = 0; i < numCells; i++) {
-      let columnX = (i % this.#_columns) * this.#_cellWidth;
-      let rowY = Math.floor(i / this.#_columns) * this.#_cellHeight;
+      let x = (i % this.#_columns) * this.#_cellWidth;
+      let y = Math.floor(i / this.#_columns) * this.#_cellHeight;
 
       /** @type number */
       let noise;
 
       if (this.#_noise) {
         noise = randomUtils.noise2D(
-          columnX,
-          rowY,
+          x,
+          y,
           this.#_noise.frequency,
           this.#_noise.amplitude,
         );
 
-        columnX += noise;
-        rowY += noise;
+        x += noise;
+        y += noise;
       }
 
-      this.#_points.push(new Point(columnX, rowY, noise));
+      // If animating, this is only the initial point positions.
+      this.#_points.push(new Point(x, y, noise));
     }
 
     return this;
   }
 
   /**
+   * Draws a graphical representation of the grid points onto the canvas.
+   *
    * @param {CanvasRenderingContext2D} context
    * @param {{ color?: FillStyle, radius?: number, shadow?: { color: string, blur?: number } }} [options]
    */
