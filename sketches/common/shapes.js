@@ -1,5 +1,4 @@
 const randomUtils = require('canvas-sketch-util/random');
-const mathUtils = require('canvas-sketch-util/math');
 
 const { getCartesianCoords, shadow } = require('./helper');
 const Point = require('./Point');
@@ -69,17 +68,17 @@ const determineStrokeColor = (color, defaultColor = 'red') => {
    * @param {number} [defaultWidth]
    * @return {number}
    */
-// const determineStrokeWidth = (width, defaultWidth = 4) => {
-//   if (typeof width === 'number') {
-//     return width;
-//   }
+const determineStrokeWidth = (width, defaultWidth = 4) => {
+  if (typeof width === 'number') {
+    return width;
+  }
 
-//   if (typeof width === 'function') {
-//     width = width();
-//   }
+  if (typeof width === 'function') {
+    width = width();
+  }
 
-//   return defaultWidth;
-// };
+  return defaultWidth;
+};
 
 class Grid {
   /** @type {Point[]} */
@@ -233,6 +232,8 @@ class Grid {
   }
 
   /**
+   * Draw quadratic curves through the grid row points.
+   *
    * @param {CanvasRenderingContext2D} context
    * @param {{ color?: FillStyle, width?: number }} [options]
    */
@@ -276,6 +277,11 @@ class Grid {
   }
 
   /**
+   * Draw segmented quadrative curves through row points.
+   * Provide noise and width.
+   * @todo Maybe we don't need to pass noise, or line width?
+   *        Maybe we can use just one variable for this.
+   *
    * @param {CanvasRenderingContext2D} context
    * @param {{ color?: FillStyle | ((pointNoise: number) => FillStyle), width?: number | ((pointNoise: number) => number) }} [options]
    */
@@ -319,18 +325,12 @@ class Grid {
           ? options?.color(curr.noise)
           : options?.color;
 
-        context.strokeStyle = determineStrokeColor(strokeColor);
-        // context.lineWidth = determineStrokeWidth(options?.width);
+        const strokeWidth = typeof options?.width === 'function'
+          ? options?.width(curr.noise)
+          : options?.width;
 
-        context.lineWidth = curr.noise
-          ? mathUtils.mapRange(
-            curr.noise,
-            -this.#_noise.amplitude,
-            this.#_noise.amplitude,
-            0,
-            5,
-          )
-          : 5;
+        context.strokeStyle = determineStrokeColor(strokeColor);
+        context.lineWidth = determineStrokeWidth(strokeWidth);
 
         context.moveTo(lastX, lastY);
 
@@ -353,6 +353,9 @@ class Grid {
   }
 
   /**
+   * Draw straight lines from point to point in rows.
+   * Provide line color and width in options.
+   *
    * @param {CanvasRenderingContext2D} context
    * @param {{ color?: FillStyle, width?: number }} [options]
    */

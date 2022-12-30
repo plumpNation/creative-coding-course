@@ -1,5 +1,5 @@
 const canvasSketch = require('canvas-sketch');
-const { math } = require('canvas-sketch-util');
+const mathUtils = require('canvas-sketch-util/math');
 // const random = require('canvas-sketch-util/random');
 // const mathUtils = require('canvas-sketch-util/math');
 const createColormap = require('colormap');
@@ -18,7 +18,7 @@ const sketch = ({ width, height }) => {
   const numRows = 8;
 
   const frequency = 2;
-  const amplitude = 50;
+  const amplitude = 50; // min 9 for colormap
 
   const grid1 = grid()
     .columns(numColumns)
@@ -50,13 +50,15 @@ const sketch = ({ width, height }) => {
     context.fillRect(0, 0, width, height);
 
     grid1
-      // .drawPoints(context, { color: 'red', radius: 10 })
+    // .drawRowLines(context, { color: 'yellow', width: 10 });
+    // .drawRowCurves(context, { color: 'yellow', width: 10 });
+    // .drawPoints(context, { color: 'red', radius: 10 })
       .drawSegmentRowCurves(context, {
         color: (pointNoise) => {
-          // return random.pick(segmentColors);
+        // return random.pick(segmentColors);
 
           /** @type {number} */
-          const t = math.mapRange(
+          const t = mathUtils.mapRange(
             pointNoise,
             -gridNoise.amplitude,
             gridNoise.amplitude,
@@ -66,6 +68,15 @@ const sketch = ({ width, height }) => {
           );
 
           return colormap[Math.round(t)];
+        },
+        width: (pointNoise) => {
+          return mathUtils.mapRange(
+            pointNoise,
+            -gridNoise.amplitude,
+            gridNoise.amplitude,
+            0,
+            5,
+          );
         },
       });
   };
