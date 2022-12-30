@@ -1,7 +1,6 @@
 const canvasSketch = require('canvas-sketch');
 const mathUtils = require('canvas-sketch-util/math');
-// const random = require('canvas-sketch-util/random');
-// const mathUtils = require('canvas-sketch-util/math');
+const randomUtils = require('canvas-sketch-util/random');
 const createColormap = require('colormap');
 
 // const colors = require('./common/colors');
@@ -11,13 +10,14 @@ const { grid } = require('./common/shapes');
 const settings = {
   /** @type {[number, number]} */
   dimensions: [1080, 1080],
+  animate: true,
 };
 
 const sketch = ({ width, height }) => {
   const numColumns = 72;
   const numRows = 8;
 
-  const frequency = 2;
+  const frequency = 0.002;
   const amplitude = 50; // min 9 for colormap
 
   const grid1 = grid()
@@ -25,14 +25,7 @@ const sketch = ({ width, height }) => {
     .rows(numRows)
     .width(width)
     .height(height)
-    .noise(frequency, amplitude)
     .build();
-
-  // const segmentColors = [
-  //   random.pick(colors).hex,
-  //   random.pick(colors).hex,
-  //   random.pick(colors).hex,
-  // ];
 
   /**
    * @type string[]
@@ -43,37 +36,56 @@ const sketch = ({ width, height }) => {
     nshades: amplitude,
   });
 
-  const gridNoise = grid1.getNoise();
-
-  return ({ context, width, height }) => {
+  return ({ context, width, height, frame }) => {
     context.fillStyle = 'black';
     context.fillRect(0, 0, width, height);
 
     grid1
-    // .drawRowLines(context, { color: 'yellow', width: 10 });
-    // .drawRowCurves(context, { color: 'yellow', width: 10 });
-    // .drawPoints(context, { color: 'red', radius: 10 })
-      .drawSegmentRowCurves(context, {
-        color: (pointNoise) => {
-        // return random.pick(segmentColors);
+      .mutatePoints((point) => {
+        const speed = 3;
 
-          /** @type {number} */
-          const t = mathUtils.mapRange(
-            pointNoise,
-            -gridNoise.amplitude,
-            gridNoise.amplitude,
-            0, // output min is first item in array
-            colormap.length - 1, // output max is last item in array
-            true,
+        const noise = randomUtils.noise2D(
+          point.initialX + frame * speed,
+          point.initialY + frame * speed,
+          frequency,
+          amplitude,
+        );
+
+        point.x = point.initialX + noise;
+        point.y = point.initialY + noise;
+      })
+      .drawSegmentRowCurves(context, {
+        color: (point) => {
+          const noise = randomUtils.noise2D(
+            point.x,
+            point.y,
+            frequency,
+            amplitude,
           );
 
-          return colormap[Math.round(t)];
+          const colormapIndex = Math.floor(mathUtils.mapRange(
+            noise,
+            -amplitude,
+            amplitude,
+            0, // output min is first item in array
+            amplitude, // output max is last item in array
+            true,
+          ));
+
+          return colormap[colormapIndex];
         },
-        width: (pointNoise) => {
+        width: (point) => {
+          const noise = randomUtils.noise2D(
+            point.x,
+            point.y,
+            frequency,
+            amplitude,
+          );
+
           return mathUtils.mapRange(
-            pointNoise,
-            -gridNoise.amplitude,
-            gridNoise.amplitude,
+            noise,
+            -amplitude,
+            amplitude,
             0,
             5,
           );
