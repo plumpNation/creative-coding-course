@@ -8,7 +8,6 @@ const { grid } = require('./common/shapes');
 
 /** @type {import('canvas-sketch-types/canvas-sketch/lib/core/SketchManager').CanvasSketchSettings} */
 const settings = {
-  /** @type {[number, number]} */
   dimensions: [1080, 1080],
   animate: true,
 };

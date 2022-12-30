@@ -3,10 +3,10 @@ const canvasSketch = require('canvas-sketch');
 const Point = require('./common/Point');
 const { setupPointInteractions } = require('./common/point-interactions');
 
+/** @type {import('canvas-sketch-types/canvas-sketch/lib/core/SketchManager').CanvasSketchSettings} */
 const settings = {
-  /** @type {[number, number]} */
   dimensions: [1080, 1080],
-  animate: true
+  // animate: true
 };
 
 /** @type {Point[]} */

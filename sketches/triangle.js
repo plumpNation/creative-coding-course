@@ -14,6 +14,7 @@ const artboard = 1000;
 /** @type {[number, number]} */
 const dimensions = [artboard, artboard];
 
+/** @type {import('canvas-sketch-types/canvas-sketch/lib/core/SketchManager').CanvasSketchSettings} */
 const settings = {
   dimensions,
   // animate: true,
