@@ -8,7 +8,8 @@
     "sketch:triangle": "canvas-sketch sketches/triangle.js",
     "sketch:lines": "canvas-sketch sketches/lines.js",
     "sketch:curves": "canvas-sketch sketches/curves.js",
-    "sketch:grid": "canvas-sketch sketches/grid.js"
+    "sketch:grid": "canvas-sketch sketches/grid.js",
+    "sketch:animation": "canvas-sketch sketches/animation.js"
   },
   "keywords": [],
   "author": "Gavin King <plumpnation@gmail.com>",

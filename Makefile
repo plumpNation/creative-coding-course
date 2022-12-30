@@ -27,6 +27,9 @@ sketch-curves: ## Run curves sketch
 sketch-grid: ## Run grid sketch
 	pnpm run sketch:grid
 
+sketch-animation: ## Run animation sketch
+	pnpm run sketch:animation
+
 install: ## Install dependencies
 	pnpm install
 
