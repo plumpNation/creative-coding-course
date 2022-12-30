@@ -10,7 +10,8 @@
     "sketch:curves": "canvas-sketch sketches/curves.js",
     "sketch:grid": "canvas-sketch sketches/grid.js",
     "sketch:animation": "canvas-sketch sketches/animation.js",
-    "sketch:animation:export": "canvas-sketch sketches/animation.js --output=saved-output --stream"
+    "sketch:animation:export": "canvas-sketch sketches/animation.js --output=saved-output --stream",
+    "sketch:audioviz": "canvas-sketch sketches/audio-viz.js"
   },
   "keywords": [],
   "author": "Gavin King <plumpnation@gmail.com>",

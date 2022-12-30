@@ -33,6 +33,9 @@ sketch-animation: ## Run animation sketch
 sketch-animation-export: ## Run animation sketch and export mp4
 	pnpm run sketch:animation:export
 
+sketch-audio-viz: ## Run audio visulation sketch
+	pnpm run sketch:audioviz
+
 install: ## Install dependencies
 	pnpm install
 
