@@ -16,6 +16,7 @@ let audioData;
 
 let manager;
 
+/** @type {import('canvas-sketch-types/canvas-sketch/lib/core/SketchManager').CreateSketch<typeof settings>} */
 const sketch = () => {
   const bins = [4, 12, 37];
 
