@@ -29,7 +29,7 @@
     "riso-colors": "1.0.1"
   },
   "devDependencies": {
-    "@types/canvas-sketch-util": "npm:canvas-sketch-util-types",
+    "@types/canvas-sketch-util": "npm:canvas-sketch-util-types@0.5.1",
     "@types/colormap": "2.3.1",
     "canvas-sketch-cli": "1.11.20",
     "canvas-sketch-types": "1.1.2"

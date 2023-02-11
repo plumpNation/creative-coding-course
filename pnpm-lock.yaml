@@ -2,7 +2,7 @@ lockfileVersion: 5.4
 
 specifiers:
   '@ffmpeg-installer/ffmpeg': 1.1.0
-  '@types/canvas-sketch-util': npm:canvas-sketch-util-types
+  '@types/canvas-sketch-util': npm:canvas-sketch-util-types@0.5.1
   '@types/colormap': 2.3.1
   canvas-sketch: 0.7.6
   canvas-sketch-cli: 1.11.20
@@ -29,7 +29,7 @@ dependencies:
   riso-colors: 1.0.1
 
 devDependencies:
-  '@types/canvas-sketch-util': /canvas-sketch-util-types/0.3.0
+  '@types/canvas-sketch-util': /canvas-sketch-util-types/0.5.1
   '@types/colormap': 2.3.1
   canvas-sketch-cli: 1.11.20
   canvas-sketch-types: 1.1.2
@@ -1116,8 +1116,8 @@ packages:
       '@types/p5': 0.9.1
     dev: true
 
-  /canvas-sketch-util-types/0.3.0:
-    resolution: {integrity: sha512-Pklt2PC95eaugKyZa/aYJSkgBy5XgF9+JS9hZ+ti3glJD0lC7uB+E3XpL+U+m+VX8NIQBp2C7zwl+S/0Gx5Ynw==}
+  /canvas-sketch-util-types/0.5.1:
+    resolution: {integrity: sha512-AEyc+4XEd76cKVr0CH/U4bIDO+SDmW69dq+CNGtUgdmD7A99GepKQEYx6gC0ChryEXXRo148Yxf5WUs/eFoGSA==}
     dev: true
 
   /canvas-sketch-util/1.10.0:
