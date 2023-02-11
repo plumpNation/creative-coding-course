@@ -25,6 +25,7 @@ const settings = {
 /**
  * This is the main application controller.
  * It is run by the canvas-sketch application.
+ * @type {import('canvas-sketch-types/canvas-sketch/lib/core/SketchManager').CreateSketch<typeof settings>}
  */
 const sketch = ({ width, height }) => {
   randomUtils.setSeed(seed);

@@ -12,6 +12,7 @@ const settings = {
   animate: true,
 };
 
+/** @type {import('canvas-sketch-types/canvas-sketch/lib/core/SketchManager').CreateSketch<typeof settings>} */
 const sketch = ({ width, height }) => {
   const numColumns = 72;
   const numRows = 8;

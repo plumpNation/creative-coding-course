@@ -1,10 +1,8 @@
 const { normalizePosition } = require('./helper');
-// eslint-disable-next-line no-unused-vars
-const Point = require('./Point');
 
 /**
  * @param {HTMLCanvasElement} canvas
- * @param {Point[]} points
+ * @param {import('./Point')[]} points
  * @param {(x: number, y: number) => void} [noHitCallback] What to do if there's no hit target
  */
 const setupPointInteractions = (canvas, points, noHitCallback) => {

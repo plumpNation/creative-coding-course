@@ -11,6 +11,7 @@ const settings = {
   dimensions: [1080, 1080],
 };
 
+/** @type {import('canvas-sketch-types/canvas-sketch/lib/core/SketchManager').CreateSketch<typeof settings>} */
 const sketch = ({ width, height }) => {
   const numColumns = 72;
   const numRows = 8;

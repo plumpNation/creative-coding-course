@@ -14,9 +14,7 @@ const points = [
   new Point(800, 540),
 ];
 
-/**
- * @param {{ canvas: HTMLCanvasElement }} options
- */
+/** @type {import('canvas-sketch-types/canvas-sketch/lib/core/SketchManager').CreateSketch<typeof settings>} */
 const sketch = ({ canvas }) => {
   setupPointInteractions(canvas, points);
 
