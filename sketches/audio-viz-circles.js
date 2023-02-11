@@ -19,6 +19,7 @@ let manager;
 /** @type {import('canvas-sketch-types/canvas-sketch/lib/core/SketchManager').CreateSketch<typeof settings>} */
 const sketch = () => {
   const bins = [4, 12, 37];
+  const twoPI = Math.PI * 2;
 
   return ({ context, width, height }) => {
     context.fillStyle = 'white';
@@ -28,12 +29,18 @@ const sketch = () => {
       return;
     }
 
+    if (!audioData) {
+      audioData = new Float32Array(analyserNode.frequencyBinCount);
+    }
+
     // copy the decibel value of each frequency to the array
     analyserNode.getFloatFrequencyData(audioData);
 
     // const avg = getAverageFrequencyDecibel(audioData);
 
-    bins.forEach((bin) => {
+    for (let i = 0; i < bins.length; i++) {
+      const bin = bins[i];
+
       const mapped = mathUtils.mapRange(audioData[bin], analyserNode.minDecibels, analyserNode.maxDecibels, 0, 1, true);
       const radius = mapped * 300;
 
@@ -42,11 +49,11 @@ const sketch = () => {
       context.lineWidth = 10;
 
       context.beginPath();
-      context.arc(0, 0, radius, 0, Math.PI * 2);
+      context.arc(0, 0, radius, 0, twoPI);
       context.stroke();
 
-      context.restore();
-    });
+      context.restore(); 
+    }
   };
 };
 
@@ -81,10 +88,6 @@ const createAudio = () => {
   analyserNode.fftSize = 512; // always needs to be a power of 2
   analyserNode.smoothingTimeConstant = 0.9;
   sourceNode.connect(analyserNode);
-
-  audioData = new Float32Array(analyserNode.frequencyBinCount);
-
-  // console.log(audioData.length);
 
   return audio;
 };
