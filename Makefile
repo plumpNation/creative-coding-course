@@ -36,6 +36,9 @@ sketch-animation-export: ## Run animation sketch and export mp4
 sketch-audioviz-arcs: ## Run more interesting audio visulation sketch
 	pnpm run sketch:audioviz:arcs
 
+sketch-audioviz-brockmann: ## Run even more interesting audio visulation sketch
+	pnpm run sketch:audioviz:brockmann
+
 sketch-audioviz-circles: ## Run basic audio visulation sketch
 	pnpm run sketch:audioviz:circles
 

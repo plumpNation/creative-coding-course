@@ -12,6 +12,7 @@
     "sketch:animation": "canvas-sketch sketches/animation.js",
     "sketch:animation:export": "canvas-sketch sketches/animation.js --output=saved-output --stream",
     "sketch:audioviz:arcs": "canvas-sketch sketches/audio-viz-arcs.js",
+    "sketch:audioviz:brockmann": "canvas-sketch sketches/audio-viz-brockmann.js",
     "sketch:audioviz:circles": "canvas-sketch sketches/audio-viz-circles.js"
   },
   "keywords": [],
