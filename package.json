@@ -11,7 +11,8 @@
     "sketch:grid": "canvas-sketch sketches/grid.js",
     "sketch:animation": "canvas-sketch sketches/animation.js",
     "sketch:animation:export": "canvas-sketch sketches/animation.js --output=saved-output --stream",
-    "sketch:audioviz": "canvas-sketch sketches/audio-viz.js"
+    "sketch:audioviz:arcs": "canvas-sketch sketches/audio-viz-arcs.js",
+    "sketch:audioviz:circles": "canvas-sketch sketches/audio-viz-circles.js"
   },
   "keywords": [],
   "author": "Gavin King <plumpnation@gmail.com>",
@@ -21,6 +22,7 @@
     "canvas-sketch": "0.7.6",
     "canvas-sketch-util": "1.10.0",
     "colormap": "2.3.2",
+    "eases": "1.0.8",
     "eslint": "8.28.0",
     "eslint-config-standard": "17.0.0",
     "eslint-plugin-import": "2.26.0",
@@ -31,6 +33,7 @@
   "devDependencies": {
     "@types/canvas-sketch-util": "npm:canvas-sketch-util-types@0.5.1",
     "@types/colormap": "2.3.1",
+    "@types/eases": "1.0.2",
     "canvas-sketch-cli": "1.11.20",
     "canvas-sketch-types": "1.1.2"
   }

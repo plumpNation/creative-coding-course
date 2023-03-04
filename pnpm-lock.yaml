@@ -4,11 +4,13 @@ specifiers:
   '@ffmpeg-installer/ffmpeg': 1.1.0
   '@types/canvas-sketch-util': npm:canvas-sketch-util-types@0.5.1
   '@types/colormap': 2.3.1
+  '@types/eases': ^1.0.2
   canvas-sketch: 0.7.6
   canvas-sketch-cli: 1.11.20
   canvas-sketch-types: 1.1.2
   canvas-sketch-util: 1.10.0
   colormap: 2.3.2
+  eases: ^1.0.8
   eslint: 8.28.0
   eslint-config-standard: 17.0.0
   eslint-plugin-import: 2.26.0
@@ -21,6 +23,7 @@ dependencies:
   canvas-sketch: 0.7.6
   canvas-sketch-util: 1.10.0
   colormap: 2.3.2
+  eases: 1.0.8
   eslint: 8.28.0
   eslint-config-standard: 17.0.0_5dakk4wnrkkieagghiqvu5yn4y
   eslint-plugin-import: 2.26.0_eslint@8.28.0
@@ -31,6 +34,7 @@ dependencies:
 devDependencies:
   '@types/canvas-sketch-util': /canvas-sketch-util-types/0.5.1
   '@types/colormap': 2.3.1
+  '@types/eases': 1.0.2
   canvas-sketch-cli: 1.11.20
   canvas-sketch-types: 1.1.2
 
@@ -472,6 +476,10 @@ packages:
 
   /@types/colormap/2.3.1:
     resolution: {integrity: sha512-GCPa0VCih4kp/TPPkjdjgUG19yCOPbpP9UpjEYTxUnIhaNqMrhlL9wSAyxm0cRfSubT3KUETZ+8vXYn6fmq0OQ==}
+    dev: true
+
+  /@types/eases/1.0.2:
+    resolution: {integrity: sha512-XVMdH9hz0mwa3cOUIjAXuQWfF9+eGgEXpFwssWH/H2g1NZHs2QKYCNuf+rAjUvI7fF8Pq6rb5FrNo2RNxrPI+w==}
     dev: true
 
   /@types/json5/0.0.29:
@@ -1628,6 +1636,10 @@ packages:
       readable-stream: 2.3.7
       stream-shift: 1.0.1
     dev: true
+
+  /eases/1.0.8:
+    resolution: {integrity: sha512-U8TwgFYPktV07tV9yxoIu9TIWsXHGOuDJNXlyihWEMnGMXaoh2kkfWf0N1itbCjHWrgs+/leubuG7m+OgkfA0Q==}
+    dev: false
 
   /ee-first/1.1.1:
     resolution: {integrity: sha512-WMwm9LhRUo+WUaRN+vRuETqG89IgZphVSNkdFgeb6sS/E4OrDIN7t48CAewSHXc6C8lefD8KKfr5vY61brQlow==}

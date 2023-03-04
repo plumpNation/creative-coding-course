@@ -33,8 +33,11 @@ sketch-animation: ## Run animation sketch
 sketch-animation-export: ## Run animation sketch and export mp4
 	pnpm run sketch:animation:export
 
-sketch-audio-viz: ## Run audio visulation sketch
-	pnpm run sketch:audioviz
+sketch-audioviz-arcs: ## Run more interesting audio visulation sketch
+	pnpm run sketch:audioviz:arcs
+
+sketch-audioviz-circles: ## Run basic audio visulation sketch
+	pnpm run sketch:audioviz:circles
 
 install: ## Install dependencies
 	pnpm install
